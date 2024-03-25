@@ -154,14 +154,17 @@ function postNewTweet() {
 
 function handleSendReplyClick(tweetID) {
   const replyInput = document.querySelector(`#reply-input-${tweetID}`)
-  const replyTargetTweet = tweetsData.find((tweet) => tweetID === tweet.uuid)
-  const replyObject = {
-    handle: "@NewUser",
-    profilePic: "./images/scrimbalogo.png",
-    tweetText: `${replyInput.value}`,
+
+  if (replyInput.value) {
+    const replyTargetTweet = tweetsData.find((tweet) => tweetID === tweet.uuid)
+    const replyObject = {
+      handle: "@NewUser",
+      profilePic: "./images/scrimbalogo.png",
+      tweetText: `${replyInput.value}`,
+    }
+    replyTargetTweet.replies.push(replyObject)
+    replyInput.value = ""
+    render()
+    document.querySelector(`#replies-${tweetID}`).classList.toggle("hidden")
   }
-  replyTargetTweet.replies.push(replyObject)
-  replyInput.value = ""
-  render()
-  document.querySelector(`#replies-${tweetID}`).classList.toggle("hidden")
 }
