@@ -14,6 +14,8 @@ document.addEventListener("click", (e) => {
     handleCommentClick(e.target.dataset.reply)
   } else if (e.target.id === "tweet-btn") {
     postNewTweet()
+  } else if (e.target.dataset.sendReply) {
+    handleSendReplyClick(e.target.dataset.sendReply)
   }
 })
 
@@ -72,6 +74,11 @@ function getFeedHTML() {
         </div>
         <div class="tweet-replies hidden" id="replies-${tweet.uuid}">
           ${repliesHTML}
+          <div class="reply-input-area">
+            <img src="images/scrimbalogo.png" class="profile-pic" />
+            <textarea placeholder="What do you think?" id="reply-input-${tweet.uuid}"></textarea>
+            <i class="fa-solid fa-share" data-send-reply="${tweet.uuid}"></i>
+          </div>
         </div>
       </div>
     `
@@ -85,7 +92,19 @@ function handleLikeClick(tweetID) {
     ? tweetTargetObj.likes - 1
     : tweetTargetObj.likes + 1
   tweetTargetObj.isLiked = !tweetTargetObj.isLiked
+
+  // checking if replies were hidden before like clicked
+  let repliesHidden = document
+    .querySelector(`#replies-${tweetID}`)
+    .classList.contains("hidden")
+    ? true
+    : false
+
   render()
+
+  if (!repliesHidden) {
+    document.querySelector(`#replies-${tweetID}`).classList.toggle("hidden")
+  }
 }
 
 function handleRetweetClick(tweetID) {
@@ -94,7 +113,19 @@ function handleRetweetClick(tweetID) {
     ? tweetTargetObj.retweets - 1
     : tweetTargetObj.retweets + 1
   tweetTargetObj.isRetweeted = !tweetTargetObj.isRetweeted
+
+  // checking if replies were hidden before retweet clicked
+  let repliesHidden = document
+    .querySelector(`#replies-${tweetID}`)
+    .classList.contains("hidden")
+    ? true
+    : false
+
   render()
+
+  if (!repliesHidden) {
+    document.querySelector(`#replies-${tweetID}`).classList.toggle("hidden")
+  }
 }
 
 function handleCommentClick(tweetID) {
@@ -119,4 +150,18 @@ function postNewTweet() {
     render()
     newTweetInput.value = ""
   }
+}
+
+function handleSendReplyClick(tweetID) {
+  const replyInput = document.querySelector(`#reply-input-${tweetID}`)
+  const replyTargetTweet = tweetsData.find((tweet) => tweetID === tweet.uuid)
+  const replyObject = {
+    handle: "@NewUser",
+    profilePic: "./images/scrimbalogo.png",
+    tweetText: `${replyInput.value}`,
+  }
+  replyTargetTweet.replies.push(replyObject)
+  replyInput.value = ""
+  render()
+  document.querySelector(`#replies-${tweetID}`).classList.toggle("hidden")
 }

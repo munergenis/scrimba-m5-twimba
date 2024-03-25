@@ -23,6 +23,16 @@ i {
   color: #999;
 }
 
+.fa-share {
+  align-self: center;
+  transition: all ease 0.15s;
+  margin-bottom: 6px;
+}
+
+.fa-share:hover {
+  opacity: 0.8;
+}
+
 .liked {
   color: red;
 }
@@ -43,10 +53,16 @@ header {
   padding-bottom: 25px;
 }
 
-.tweet-input-area {
+.tweet-input-area,
+.reply-input-area {
   display: flex;
   align-items: flex-start;
   gap: 10px;
+}
+
+.reply-input-area > textarea {
+  font-size: inherit;
+  line-height: 20px;
 }
 
 /* textareas + btn */
@@ -55,7 +71,7 @@ textarea {
   border: none;
   resize: none;
   padding: 10px;
-  margin: 0 0 20px 0;
+  margin: 0;
   height: 60px;
   width: 100%;
   font-size: 20px;
@@ -104,7 +120,8 @@ button {
   gap: 4px;
 }
 
-.tweet-reply {
+.tweet-reply,
+.reply-input-area {
   border-top: 1px solid lightgray;
   padding: 20px 0 0 0px;
   margin: 10px 0 10px 40px;
